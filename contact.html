@@ -357,7 +357,7 @@
   "@id": "https://bluemouse.blue/contact.html#contactpage",
   "url": "https://bluemouse.blue/contact.html",
   "name": "見学・体験のお申し込み｜BLUE MOUSE",
-  "description": "岡山市の児童発達支援 LITTLE BLUE MOUSE（北区辰巳）・放課後等デイサービス BLUE MOUSE（中区徳吉町）の見学・体験のお申し込みページです。受給者証をお持ちでない方もご相談いただけます。",
+  "description": "岡山市の児童発達支援 BLUE MOUSE（LITTLE）辰巳・放課後等デイサービス BLUE MOUSE（JUNIOR）徳吉の見学・体験のお申し込みページです。受給者証をお持ちでない方もご相談いただけます。",
   "inLanguage": "ja",
   "about": {
     "@type": "Organization",
@@ -368,7 +368,7 @@
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "name": "LITTLE BLUE MOUSE（児童発達支援）",
+        "name": "BLUE MOUSE（LITTLE）辰巳",
         "telephone": "+81-86-245-9880",
         "contactType": "customer service",
         "areaServed": "JP",
@@ -376,7 +376,7 @@
       },
       {
         "@type": "ContactPoint",
-        "name": "BLUE MOUSE（放課後等デイサービス）",
+        "name": "BLUE MOUSE（JUNIOR）徳吉",
         "telephone": "+81-86-273-3880",
         "contactType": "customer service",
         "areaServed": "JP",
@@ -810,7 +810,7 @@
     <div class="ct-access__grid">
       <div class="ct-acc" data-facility="afterschool">
         <div class="ct-acc__body">
-          <h3 class="ct-acc__name">BLUE MOUSE</h3>
+          <h3 class="ct-acc__name">BLUE MOUSE（JUNIOR）徳吉</h3>
           <div class="ct-acc__row"><span class="ct-acc__row-label">住所</span><span>岡山市中区徳吉町2丁目11-25</span></div>
           <div class="ct-acc__row"><span class="ct-acc__row-label">最寄</span><span>東山電停から徒歩1分</span></div>
           <div class="ct-acc__row"><span class="ct-acc__row-label">営業</span><span>月〜土 放課後〜18:00 / 長期休暇 10:00〜18:00</span></div>
@@ -822,7 +822,7 @@
       </div>
       <div class="ct-acc" data-facility="child">
         <div class="ct-acc__body">
-          <h3 class="ct-acc__name">LITTLE BLUE MOUSE</h3>
+          <h3 class="ct-acc__name">BLUE MOUSE（LITTLE）辰巳</h3>
           <div class="ct-acc__row"><span class="ct-acc__row-label">住所</span><span>岡山市北区辰巳26-102 2F</span></div>
           <div class="ct-acc__row"><span class="ct-acc__row-label">最寄</span><span>北長瀬駅から徒歩約18分</span></div>
           <div class="ct-acc__row"><span class="ct-acc__row-label">営業</span><span>平日 9:30〜18:30 / 土・祝 9:00〜18:00</span></div>
@@ -860,11 +860,11 @@
     <div>
       <p class="footer__col-title">Access</p>
       <div class="footer__fac">
-        <p class="footer__fac-name">LITTLE BLUE MOUSE（児童発達支援）</p>
+        <p class="footer__fac-name">BLUE MOUSE（LITTLE）辰巳</p>
         <p class="footer__fac-info">岡山市北区辰巳26-102 2F<br>TEL <a href="tel:0862459880">086-245-9880</a></p>
       </div>
       <div class="footer__fac">
-        <p class="footer__fac-name">BLUE MOUSE（放課後等デイサービス）</p>
+        <p class="footer__fac-name">BLUE MOUSE（JUNIOR）徳吉</p>
         <p class="footer__fac-info">岡山市中区徳吉町2丁目11-25<br>TEL <a href="tel:0862733880">086-273-3880</a></p>
       </div>
     </div>
@@ -915,8 +915,8 @@
   }
 
   var FACILITY_LABEL = {
-    child: 'LITTLE BLUE MOUSE（児童発達支援事業）',
-    afterschool: 'BLUE MOUSE（放課後等デイサービス）'
+    child: 'BLUE MOUSE（LITTLE）辰巳',
+    afterschool: 'BLUE MOUSE（JUNIOR）徳吉'
   };
 
   // ---- 申し込み完了をGA4へ送る ----
@@ -1255,7 +1255,7 @@
         // 放デイが選ばれていれば放デイ宛のキー、それ以外は既定の宛先へ
         access_key: accessKeyFor(facilityKeyFromLabel(facilityEl.value)),
         subject: facilityKeyFromLabel(facilityEl.value) === 'afterschool'
-          ? '【BLUE MOUSE】放課後等デイサービスへのお問い合わせが届きました'
+          ? '【BLUE MOUSE（JUNIOR）徳吉】お問い合わせが届きました'
           : '【BLUE MOUSE】お問い合わせが届きました',
         from_name: 'BLUE MOUSE お問い合わせフォーム',
         name: nameEl.value,
@@ -1332,14 +1332,14 @@
         body: JSON.stringify({
           // このフォームは児発の体験の専用窓口なので、宛先は常に児発
           access_key: accessKeyFor('child'),
-          subject: '【LITTLE BLUE MOUSE】児童発達支援 体験お申し込み',
+          subject: '【BLUE MOUSE（LITTLE）辰巳】児童発達支援 体験お申し込み',
           from_name: 'BLUE MOUSE お問い合わせフォーム',
           child_age: ageEl.value,
           gender: genEl.value,
           child_name: cNameEl.value,
           email: emailEl.value,
           phone: telEl.value,
-          facility: 'LITTLE BLUE MOUSE（児童発達支援事業）',
+          facility: 'BLUE MOUSE（LITTLE）辰巳',
           inquiry_type: '体験のご希望',
           traffic_source: trafficSource(),
         message: document.getElementById('c-message').value
@@ -1348,7 +1348,7 @@
       .then(function(r) { return r.json(); })
       .then(function(j) {
         if (j.success) {
-          sendLead('taiken', 'LITTLE BLUE MOUSE（児童発達支援事業）');
+          sendLead('taiken', 'BLUE MOUSE（LITTLE）辰巳');
           window.location.href = './thanks.html';
         }
         else { throw new Error(j.message || 'error'); }
@@ -1402,14 +1402,14 @@
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
           access_key: accessKeyFor('child'),
-          subject: '【LITTLE BLUE MOUSE】保育所等訪問支援のお問い合わせ',
+          subject: '【BLUE MOUSE（LITTLE）辰巳】保育所等訪問支援のお問い合わせ',
           from_name: 'BLUE MOUSE お問い合わせフォーム',
           inquirer_role: roleEl.value,
           name: nameEl.value,
           organization: orgEl.value,
           email: mailEl.value,
           phone: telEl.value,
-          facility: 'LITTLE BLUE MOUSE（保育所等訪問支援）',
+          facility: 'BLUE MOUSE（LITTLE）辰巳',
           inquiry_type: '保育所等訪問支援について',
           traffic_source: trafficSource(),
           message: msgEl.value
@@ -1417,7 +1417,7 @@
       }).then(function (r) { return r.json(); })
         .then(function (d) {
           if (d.success) {
-            sendLead('visit', 'LITTLE BLUE MOUSE（保育所等訪問支援）');
+            sendLead('visit', 'BLUE MOUSE（LITTLE）辰巳');
             location.href = './thanks.html';
           } else {
             btn.disabled = false; btn.textContent = '送信する ›';
