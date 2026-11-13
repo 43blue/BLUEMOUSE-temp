@@ -540,39 +540,71 @@
 <!-- ===== Loading ===== -->
 <style>
   .bm-loading, .bm-loading body { overflow: hidden; }
+  /* 幕：三輪車のブルーマウスが、道の上でこいでいる（2026-11-13）。
+     絵は /chara/sanrinsha_loader.png（8コマを縦に並べた1枚。元は「キャラ（ブル）/三輪車/動画」の透過WebP）。
+     大きさと位置は黄金比（1 : 1.618）で決めている。数字を変えるときは下の3か所をそろえること */
   .bm-loader {
     position: fixed; inset: 0; z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
     background: #FFFEFB;
     transition: opacity .8s cubic-bezier(.22,1,.36,1), visibility .8s;
+    /* 三輪車の幅＝画面の幅×0.382（黄金比の小さいほう）。
+       パソコンでは、スマホの最大機種（430px幅）と同じ164pxで止める。
+       横向きのスマホでは、三輪車の高さが画面の高さ×0.382を超えないよう、高さの側で止める */
+    --bm-w: min(38.2vw, 164px, 28.4vh);
   }
   .bm-loader.is-done { opacity: 0; visibility: hidden; }
-  .bm-loader__inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-  .bm-loader__logo {
-    width: min(220px, 54vw); height: auto;
-    opacity: 0; transform: translateY(8px) scale(.97); filter: blur(7px);
-    animation: bmLogoIn 1.15s cubic-bezier(.22,1,.36,1) .08s forwards;
+  /* 道（地面の線）を画面の上から61.8%＝黄金分割の高さに引き、三輪車をその上に乗せる */
+  .bm-loader__inner {
+    position: absolute; left: 50%; top: 61.8%;
+    transform: translate(-50%, -100%);
+    display: flex; flex-direction: column; align-items: center;
   }
-  .bm-loader__rule {
-    position: relative; width: min(220px, 54vw); height: 1px;
-    background: rgba(51,37,26,.09); overflow: hidden;
+  .bm-loader__mouse {
+    width: var(--bm-w); height: calc(var(--bm-w) * 1.3439); /* 絵の縦横比 410:551 */
+    overflow: hidden;
+    opacity: 0; transform: translateX(calc(var(--bm-w) * .2));
+    transition: opacity .6s ease-out, transform .7s cubic-bezier(.22,1,.36,1);
   }
-  .bm-loader__rule::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(90deg, #f5d24a 0%, #f2906c 50%, #5fc1c7 100%);
-    transform: scaleX(0); transform-origin: left center;
-    animation: bmRuleIn 1.25s cubic-bezier(.65,0,.35,1) .3s forwards;
+  .bm-loader__mouse i {
+    display: block; height: 800%;
+    background: url(/chara/sanrinsha_loader.png) 0 0 / 100% 100% no-repeat;
   }
-  @keyframes bmLogoIn { to { opacity: 1; transform: none; filter: blur(0); } }
-  @keyframes bmRuleIn { to { transform: scaleX(1); } }
+  /* 絵が届いたら、右から少しこいで来て止まる（三輪車は左向き＝左へ進む） */
+  .bm-loader.is-in .bm-loader__mouse { opacity: 1; transform: none; }
+  .bm-loader.is-in .bm-loader__mouse i { animation: bmRide 1s steps(8) infinite; }
+  /* 幕が上がるときは、進む向き（左）へ少し進みながら幕と一緒に消える。
+     大きく走り去らせると、薄くなった三輪車がヒーローの文字の上を横切って見えたのでやめた */
+  .bm-loader.is-done .bm-loader__mouse {
+    transform: translateX(calc(var(--bm-w) * -.2));
+    transition: transform .8s cubic-bezier(.22,1,.36,1);
+  }
+  /* 道：太さは三輪車の輪郭線と同じ（元の絵764px幅で約7.5px）。長さは三輪車の幅×1.618 */
+  .bm-loader__road {
+    position: relative; overflow: hidden; border-radius: 99px;
+    width: calc(var(--bm-w) * 1.618);
+    height: max(1px, calc(var(--bm-w) * .0098));
+    margin-top: calc(var(--bm-w) * -.0065); /* 車輪がいちばん下がったとき、ちょうど線に乗る */
+    transform: scaleX(0);
+    animation: bmRoadIn .9s cubic-bezier(.65,0,.35,1) .1s forwards;
+  }
+  /* 3色（イエロー→コーラル→ティール）を右へ流して、三輪車が左へ進んで見えるようにする。
+     流れる速さは前輪の回る速さに合わせた（前輪の直径＝元の絵で約230px・1秒で1回転 → 1.7秒で1巡） */
+  .bm-loader__road::after {
+    content: ''; position: absolute; top: 0; bottom: 0; left: -100%; width: 200%;
+    background: linear-gradient(90deg, #f5d24a 0%, #f2906c 12.5%, #5fc1c7 25%, #f2906c 37.5%, #f5d24a 50%, #f2906c 62.5%, #5fc1c7 75%, #f2906c 87.5%, #f5d24a 100%);
+    animation: bmRoadFlow 1.7s linear infinite;
+  }
+  @keyframes bmRide { to { transform: translateY(-100%); } }
+  @keyframes bmRoadIn { to { transform: scaleX(1); } }
+  @keyframes bmRoadFlow { to { transform: translateX(50%); } }
   @media (prefers-reduced-motion: reduce) {
-    .bm-loader__logo, .bm-loader__rule::after { animation: none; opacity: 1; transform: none; filter: none; }
+    .bm-loader__mouse i, .bm-loader__road, .bm-loader__road::after { animation: none; transform: none; }
   }
 </style>
 <div class="bm-loader" id="bmLoader" aria-hidden="true">
   <div class="bm-loader__inner">
-    <img src="./logo.png" alt="" class="bm-loader__logo" />
-    <span class="bm-loader__rule"></span>
+    <div class="bm-loader__mouse"><i></i></div>
+    <span class="bm-loader__road"></span>
   </div>
 </div>
 <script>
@@ -611,11 +643,52 @@
     root.classList.add('bm-ready');
     setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 900);
   }
-  var start = Date.now(), MIN = 1500;
-  function finish() { setTimeout(done, Math.max(0, MIN - (Date.now() - start))); }
-  if (document.readyState === 'complete') finish();
-  else window.addEventListener('load', finish);
-  setTimeout(done, 4500); // 画像等が失敗しても必ず解除する保険
+  // ---- 幕を上げるタイミング（2026-11-13）----
+  // 三輪車は1秒でペダルが1回転する。幕はその区切りでだけ上げ、こいでいる途中で切らない。
+  // 最低2回転は見せる。最初の画面に見えている画像がそろわなくても、3回転で上げる。
+  // （以前は「ページの全画像」を待っていた。トップは画像だけで約4.5MBあり、スマホでは毎回4.5秒の保険まで出ていた）
+  var CYCLE = 1000, MIN = 2 * CYCLE, MAX = 3 * CYCLE;
+  var shownAt = 0, ready = false, timer = 0;
+  function schedule() {
+    if (!shownAt || removed) return;
+    var t = Date.now() - shownAt;
+    var at = ready ? Math.max(MIN, Math.ceil(t / CYCLE) * CYCLE) : MAX;
+    clearTimeout(timer);
+    timer = setTimeout(done, Math.max(0, at - t));
+  }
+  // 三輪車の絵が届いてから登場させ、そこから数える（先に数え始めると、こぐ姿を見せないまま幕が上がる）
+  var pic = new Image();
+  pic.onload = function () {
+    if (removed) return;
+    el.classList.add('is-in');
+    shownAt = Date.now();
+    schedule();
+  };
+  pic.src = '/chara/sanrinsha_loader.png';
+  // 最初の画面に見えている画像がそろったら ready。下のほうの写真までは待たない
+  var firstView = null;
+  function markReady() { if (ready) return; ready = true; schedule(); }
+  function check() {
+    if (!firstView) return;
+    for (var i = 0; i < firstView.length; i++) { if (!firstView[i].complete) return; }
+    markReady();
+  }
+  function collect() {
+    var vh = window.innerHeight;
+    firstView = [];
+    for (var i = 0; i < document.images.length; i++) {
+      var im = document.images[i], r = im.getBoundingClientRect();
+      if (!r.width || r.top >= vh) continue;
+      firstView.push(im);
+      im.addEventListener('load', check);
+      im.addEventListener('error', check);
+    }
+    check();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', collect);
+  else collect();
+  window.addEventListener('load', markReady);
+  setTimeout(done, 4500); // 三輪車の絵が届かない・何かが失敗しても、必ず幕を上げる保険
 })();
 </script>
 
